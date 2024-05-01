@@ -19,3 +19,9 @@ def get_eventos():
   for ev in eventos:
     eventos_dict.append(ev.__dict__)
   return jsonify(eventos_dict)
+
+@app.route('/api/eventos/<int:id>/')
+def get_evento(id):
+  for ev in eventos:
+    if ev.id == id:
+      return jsonify(ev.__dict__)
