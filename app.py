@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, abort, make_response
 from evento import Evento
 from evento_online import EventoOnline
 
@@ -20,8 +20,14 @@ def get_eventos():
     eventos_dict.append(ev.__dict__)
   return jsonify(eventos_dict)
 
+@app.errorhandler(404)
+def not_found(error):
+  return (jsonify(erro=str(error)), 404)
+
 @app.route('/api/eventos/<int:id>/')
 def get_evento(id):
   for ev in eventos:
     if ev.id == id:
       return jsonify(ev.__dict__)
+  
+  abort(404,"Evento não encontrado")
