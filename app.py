@@ -48,10 +48,21 @@ def bad_request(error):
 def not_found(error):
   return (jsonify(erro=str(error)), 404)
 
-@app.route('/api/eventos/<int:id>/')
-def get_evento(id):
+def find_evento_or_404(id):
   for ev in eventos:
     if ev.id == id:
-      return jsonify(ev.__dict__)
+      return ev
   
   abort(404,"Evento não encontrado")
+
+@app.route('/api/eventos/<int:id>/')
+def get_evento(id):
+  ev = find_evento_or_404(id)
+  return jsonify(ev.__dict__)
+
+@app.route('/api/eventos/<int:id>/', methods=['DELETE'])
+def delete_evento(id):
+  for ev in eventos:
+    ev = find_evento_or_404(id)
+    eventos.remove(ev)
+    return jsonify(id=id)
