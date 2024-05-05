@@ -66,3 +66,21 @@ def delete_evento(id):
     ev = find_evento_or_404(id)
     eventos.remove(ev)
     return jsonify(id=id)
+
+@app.route('/api/eventos/<int:id>/', methods=['PUT'])
+def edit_evento(id):
+  data = request.get_json()
+  nome = data.get('nome')
+  local = data.get('local')
+
+  if not nome:
+    abort(400, "'nome' precisa ser informado! ")
+
+  if not local:
+    abort(400, "'local' precisa ser informado! ")
+
+  ev = find_evento_or_404(id)
+  ev.nome = nome
+  ev.local = local
+
+  return jsonify(ev.__dict__)
