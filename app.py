@@ -84,3 +84,22 @@ def edit_evento(id):
   ev.local = local
 
   return jsonify(ev.__dict__)
+
+@app.route('/api/eventos/<int:id>/', methods=['PATCH'])
+def edit_partial_evento(id):
+  data = request.get_json()
+  ev = find_evento_or_404(id)
+
+  if "nome" in data.keys():
+    nome = data.get('nome')
+    if not nome:
+      abort(400, "'nome' precisa ser informado! ")
+    ev.nome = nome
+  
+  if "local" in data.keys():
+    local = data.get('local')
+    if not local:
+      abort(400, "'local' precisa ser informado! ")
+    ev.local = local
+
+  return jsonify(ev.__dict__)
